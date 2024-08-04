@@ -1,44 +1,65 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'user.dart';
+import 'admin.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MapTiler Example',
+      title: 'User Admin App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String mapTilerToken = 'xQrnBPgGdnZ4sLxwXa46';
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MapTiler Example'),
+        title: const Text('Home Page'),
       ),
-      body: FlutterMap(
-        options: MapOptions(
-          initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0, ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=$mapTilerToken',
-            additionalOptions: {
-              'key': mapTilerToken,
-            },
-          ),
-        ],
+      
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserInterface()),
+                );
+              },
+              child: Text('User'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminInterface()),
+                );
+              },
+              child: const Text('Admin'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623333649125",
+    "project_id": "app-tracking-e7842",
+    "storage_bucket": "app-tracking-e7842.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623333649125:android:82a3193acb23be4098c20c",
+        "android_client_info": {
+          "package_name": "com.example.maptiler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiDNMaIlNf-18PVcqLFd4Jx1saXgcB3RU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
