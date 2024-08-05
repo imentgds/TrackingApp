@@ -17,27 +17,33 @@ class MyApp extends StatefulWidget {
 
 class MyHomePage extends State<MyApp> {
   final String mapTilerToken = 'xQrnBPgGdnZ4sLxwXa46';
-  List<Marker> markers= [];
+  List<Marker> _markers= [];
+  late MapController _mapController = MapController();
+
   StreamSubscription<Position>? positionStream ;
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+
+    return MaterialApp(
+      home: Scaffold(appBar: AppBar(
         title: Text('Tracking App'),
       ),
       body: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0, ),
+          initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0),
         children: [
           TileLayer(
             urlTemplate: 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=$mapTilerToken',
             additionalOptions: {
               'key': mapTilerToken,
             },
-          ),
+          ),MarkerLayer(markers: _markers),
+
         ],
-      ),
+      ),)
+      
     );
   }
 
@@ -45,14 +51,25 @@ class MyHomePage extends State<MyApp> {
   getCurrentLocation() async{
     bool serviceEnabled;
     LocationPermission permission;
-    late MapController _mapController = MapController();
     
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
+      //yekhdemch l alert dialog tw
+      return AlertDialog(
+              title: Text("Location Unavailable"),
+              content: Text("Activate ur location first"),
+              actions: [
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );  
+      }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -64,16 +81,23 @@ class MyHomePage extends State<MyApp> {
   
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately. 
-      return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     } 
 
     if (permission == LocationPermission.whileInUse){
+      Position position= await Geolocator.getCurrentPosition();
+      print(position.latitude);
+      //_mapController.move(LatLng(position.latitude, position.longitude),15.0);
       positionStream = Geolocator.getPositionStream().listen(
           (Position? position) {
-          markers.add(Marker(
+          _markers.clear();
+          _markers.add(Marker(
             point: LatLng(position!.latitude, position.longitude),
-            child: MyApp()
+            child: Icon(
+              Icons.location_on,
+              color: Colors.red,
+              size: 40,
+            )
           ));
           setState(() {
             _mapController.move(LatLng(position.latitude, position.longitude), 11.0);
@@ -84,10 +108,9 @@ class MyHomePage extends State<MyApp> {
 
   @override
   void initState() {
-    getCurrentLocation();
     super.initState();
-  }
-
+    getCurrentLocation();
+}
   @override
   void dispose() {
     positionStream!.cancel();
