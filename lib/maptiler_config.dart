@@ -1,2 +1,0 @@
-const String mapTilerApiKey =
-    'cd43c591d8404400a11e2fre48afedc9_f80f4be2adf86dfb6bc489229669877d6cfcad293f48ffe6e77898f25ab65607';

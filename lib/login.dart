@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'admin_screen.dart';
+import 'package:maptiler1/user_screen.dart';
+import 'package:maptiler1/admin_home.dart';
+import 'test_maptiler.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -14,7 +16,7 @@ class Login extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminHome()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 5, 30, 50), // Background color
@@ -29,7 +31,7 @@ class Login extends StatelessWidget {
             SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
-                // Navigate to the user screen (if needed)
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserScreen()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 5, 30, 50), // Background color

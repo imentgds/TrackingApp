@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart' ;
+import 'package:geolocator/geolocator.dart' ;
 import 'package:firebase_database/firebase_database.dart';
+import 'package:maplibre_gl/maplibre_gl.dart' as Lat;
 
 class AdminScreen extends StatefulWidget {
   @override
@@ -17,7 +18,23 @@ class MyHomePage extends State<AdminScreen> {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Positions");
   StreamSubscription<Position>? positionStream ;
   bool trackingStarted = false;
-  bool button = false;
+  Lat.MapLibreMapController? mapController;
+  var isLight = true;
+  final styleUrl = "https://api.maptiler.com/maps/streets-v2/style.json";
+
+  _onMapCreated(Lat.MapLibreMapController controller) {
+    mapController = controller;
+  }
+
+  _onStyleLoadedCallback() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Style loaded :)"),
+        backgroundColor: Theme.of(context).primaryColor,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
 
 
   @override
@@ -32,12 +49,8 @@ class MyHomePage extends State<AdminScreen> {
       ),
       floatingActionButton: FloatingActionButton( 
         onPressed: () {
-          
           setState(() {
-            if(button)
             getCurrentLocation();
-            else dispose();
-            button= !button;
           });
         },
         child: Icon(trackingStarted ? Icons.stop : Icons.play_arrow),
@@ -47,19 +60,14 @@ class MyHomePage extends State<AdminScreen> {
   }
 
 Widget MapView(){
-  return FlutterMap(
-        options: MapOptions(
-          initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=$mapTilerToken',
-            additionalOptions: {
-              'key': mapTilerToken,
-            },
-          ),MarkerLayer(markers: _markers),
-
-        ],
-      );
+  return Lat.MapLibreMap(
+    styleString: "$styleUrl?key=$mapTilerToken",
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: const Lat.CameraPosition(target: Lat.LatLng(36.8065 , 10.1815)),
+      onStyleLoadedCallback: _onStyleLoadedCallback,
+      zoomGesturesEnabled : true,
+      doubleClickZoomEnabled: true,
+    );
 }
 
   getCurrentLocation() async{

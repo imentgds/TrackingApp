@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'login2.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 
       // After the animation is complete, navigate to the next screen
       Future.delayed(Duration(seconds: 4), () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Register()));
       });
     });
   }
