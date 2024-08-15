@@ -17,7 +17,7 @@ class MyHomePage extends State<AdminScreen> {
   DatabaseReference ref = FirebaseDatabase.instance.ref("Positions");
   StreamSubscription<Position>? positionStream ;
   bool trackingStarted = false;
-  bool button = false;
+  bool button = true;
 
 
   @override
@@ -49,7 +49,9 @@ class MyHomePage extends State<AdminScreen> {
 Widget MapView(){
   return FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0),
+          initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0,
+          ),
+           
         children: [
           TileLayer(
             urlTemplate: 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=$mapTilerToken',
@@ -65,8 +67,6 @@ Widget MapView(){
   getCurrentLocation() async{
     bool serviceEnabled;
     LocationPermission permission;
-    
-    
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -101,13 +101,11 @@ Widget MapView(){
 
     if (permission == LocationPermission.whileInUse){
       Position position= await Geolocator.getCurrentPosition();
-      ref.set({
-        "status": "on"
+      ref.update({
+        "status": "on",
+        "latitude": position.latitude,
+        "longitude":position.longitude
       });
-      ref.set({
-            "latitude": position.latitude,
-            "longitude":position.longitude
-          });
       //_mapController.move(LatLng(position.latitude, position.longitude),15.0);
       positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(
         accuracy: LocationAccuracy.high,
@@ -138,7 +136,7 @@ Widget MapView(){
 }
   @override
   void dispose() {
-    ref.set({
+    ref.update({
         "status": "off",
         "available" : "true"
       });

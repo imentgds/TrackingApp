@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login2.dart';
+import 'test.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override

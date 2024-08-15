@@ -9,43 +9,34 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
   String password = '';
   String email = '';
   String error = '';
-  dynamic result;
-
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final TextEditingController emailController = TextEditingController();
-
-
     return Scaffold(
-     resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[300],
-      body:  SafeArea(
+      body: SafeArea(
         child: Center(
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: AssetImage('assets/tracking.jpg'),
                 ),
-
-                SizedBox(height: 10,),
+                SizedBox(height: 10),
                 Text(
                   'Tracking App',
                   style: GoogleFonts.bebasNeue(fontSize: 52),
                 ),
-
-
-                SizedBox(height: 20,),
+                SizedBox(height: 20),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
@@ -54,32 +45,25 @@ class _RegisterState extends State<Register> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
-
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: TextFormField(
-                        focusNode: FocusNode(),
                         onChanged: (val) {
                           setState(() {
                             email = val;
                           });
                         },
-
                         decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Username'
+                          border: InputBorder.none,
+                          hintText: 'Username',
+                          hintStyle: TextStyle(color: Colors.black54),
                         ),
-
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
-
                   ),
                 ),
-
-
-
-                SizedBox(height: 20,),
-
+                SizedBox(height: 20),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
@@ -88,69 +72,64 @@ class _RegisterState extends State<Register> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
-
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: TextFormField(
                         controller: emailController,
-                        focusNode: FocusNode(),
-                       onChanged: (val) {
-                         setState(() {
-                           password = val;
-                         });
-                       },
+                        onChanged: (val) {
+                          setState(() {
+                            password = val;
+                          });
+                        },
                         obscureText: true,
                         decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Password'
+                          border: InputBorder.none,
+                          hintText: 'Password',
+                          hintStyle: TextStyle(color: Colors.black54),
                         ),
-
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
-
                   ),
                 ),
-
-                SizedBox(height: 20,),
-
-                
-
-                SizedBox(height: 20,),
-
+                SizedBox(height: 20),
                 Padding(
-                  padding:  EdgeInsets.all(25.0),
+                  padding: EdgeInsets.all(25.0),
                   child: ElevatedButton(
-                    onPressed: () async{
-                      if(email=="admin" && password == "admin") {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminHome()));
-                      }else if (email == "user" && password=="user") {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserScreen()));
-                        }
+                    onPressed: () async {
+                      if (email == "admin" && password == "admin") {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AdminHome()));
+                      } else if (email == "user" && password == "user") {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UserScreen()));
+                      } else {
+                        setState(() {
+                          error = 'Invalid username or password';
+                        });
+                      }
                     },
-
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[700],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        minimumSize: Size(200, 50)
+                      backgroundColor: Colors.green[700],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      minimumSize: Size(200, 50),
                     ),
-                   child: Text('Login', style: TextStyle(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18
-                    ),),
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
-
-
                 ),
-
                 Text(
                   error,
-                  style: TextStyle(color : Colors.red , fontSize: 14),
+                  style: TextStyle(color: Colors.red, fontSize: 14),
                 ),
-
-
               ],
             ),
           ),

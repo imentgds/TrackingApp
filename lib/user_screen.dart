@@ -13,15 +13,16 @@ class UserScreen extends StatefulWidget {
 }
 
 class _TrackingScreenState extends State<UserScreen> {
-  bool trackingStarted = false;
+  bool trackingStarted = false ;
   final String mapTilerToken = 'xQrnBPgGdnZ4sLxwXa46';
   List<Marker> _markers= [];
   DatabaseReference loc = FirebaseDatabase.instance.ref("Location");
   StreamSubscription<Position>? positionStream ;
   List<LatLng> routePoints = [];
+  double distanceLeft = 0.0;
 
-  LatLng userPosition = LatLng(36.8065 , 10.1815); // New York
-  LatLng destinationPosition = LatLng(34.0522, -118.2437); // Los Angeles
+  //LatLng userPosition = LatLng(36.8065 , 10.1815); // New York
+  //LatLng destinationPosition = LatLng(34.0522, -118.2437); // Los Angeles
   DatabaseReference starCountRef =FirebaseDatabase.instance.ref('Positions');
   
   @override
@@ -36,9 +37,12 @@ class _TrackingScreenState extends State<UserScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
+            /** 
             trackingStarted= !trackingStarted;
             _markers.clear();
             getCurrentLocation();
+            */
+            refresh();
             
           });
         },
@@ -73,16 +77,45 @@ class _TrackingScreenState extends State<UserScreen> {
           polylines: [
             Polyline(
               points: routePoints,
-              strokeWidth: 11.0,
-              color: Colors.yellow,
+              strokeWidth:9.0,
+              color: Color.fromARGB(255, 52, 116, 168),
             ),
           ],
         ),
-
+        if (trackingStarted) buildDistanceWidget(),
         ]
     );
   }
-
+  
+  
+    Widget buildDistanceWidget() {
+    return Positioned(
+      bottom: 20,
+      left: 20,
+      right: 20,
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Text(
+          'Distance left from the bus: ${distanceLeft.toStringAsFixed(2)} meters',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
   getCurrentLocation() async{
     bool serviceEnabled;
     LocationPermission permission;
@@ -146,6 +179,17 @@ class _TrackingScreenState extends State<UserScreen> {
               point: LatLng(latitude, longitude),
               child: Image.asset('assets/bus.png',height: 400.0,width: 400.0),
               ));
+
+              double distance = Geolocator.distanceBetween(
+            pos.latitude,
+            pos.longitude,
+            latitude,
+            longitude,
+          );
+
+          setState(() {
+            distanceLeft = distance;
+          });
              } 
             else {
               print('No valid data found');
@@ -161,7 +205,6 @@ class _TrackingScreenState extends State<UserScreen> {
     final response = await http.get(Uri.parse(url));
     print(url);
     if (response.statusCode == 200) {
-      print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
       final data = json.decode(response.body);
       final coordinates = data['features'][0]['geometry']['coordinates'];
 
@@ -169,13 +212,17 @@ class _TrackingScreenState extends State<UserScreen> {
         routePoints = coordinates
             .map<LatLng>((coord) => LatLng(coord[1], coord[0]))
             .toList();
-        print (routePoints);
       });
     } else {
       throw Exception('Failed to load route');
     }
   }
 
+void refresh(){
+  setState(() {
+    initState();
+  });
+}
 @override
   void initState() {
     starCountRef.child("status").onValue.listen((DatabaseEvent event) {
@@ -183,12 +230,16 @@ class _TrackingScreenState extends State<UserScreen> {
             if (data != null && data == 'on') {
               setState(() {
                 trackingStarted = true;
+                print("heyyyyyyyyyyyyyyyyyyyy");
+                getCurrentLocation();
               });
             } else {
+
               setState(() {
                 trackingStarted = false;
               });
     }});
+    print(trackingStarted);
     super.initState();
     _markers.clear();
     

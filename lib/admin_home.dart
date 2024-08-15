@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maptiler1/admin_screen.dart';
-import 'package:maptiler1/login.dart';
+import 'package:maptiler1/test.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -77,7 +77,7 @@ class Driver_Home extends State<AdminHome> {
         );
       }
   void signOut() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
   }   
   void goTracking() {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
