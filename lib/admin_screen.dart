@@ -13,7 +13,7 @@ class AdminScreen extends StatefulWidget {
 class MyHomePage extends State<AdminScreen> {
   final String mapTilerToken = 'xQrnBPgGdnZ4sLxwXa46';
   List<Marker> _markers= [];
-  late MapController _mapController = MapController();
+  final MapController _mapController = MapController();
   DatabaseReference ref = FirebaseDatabase.instance.ref("Positions");
   StreamSubscription<Position>? positionStream ;
   bool trackingStarted = false;
@@ -50,6 +50,9 @@ Widget MapView(){
   return FlutterMap(
         options: MapOptions(
           initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0,
+          onMapReady: () {
+              _mapController.move(LatLng(36.8098, 10.1115),14.0);
+          },
           ),
            
         children: [

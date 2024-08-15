@@ -20,6 +20,7 @@ class _TrackingScreenState extends State<UserScreen> {
   StreamSubscription<Position>? positionStream ;
   List<LatLng> routePoints = [];
   double distanceLeft = 0.0;
+  String unit= "m";
 
   //LatLng userPosition = LatLng(36.8065 , 10.1815); // New York
   //LatLng destinationPosition = LatLng(34.0522, -118.2437); // Los Angeles
@@ -89,6 +90,9 @@ class _TrackingScreenState extends State<UserScreen> {
   
   
     Widget buildDistanceWidget() {
+      if(distanceLeft>=1000.0){distanceLeft = distanceLeft/1000; 
+      unit="Km";
+      }
     return Positioned(
       bottom: 20,
       left: 20,
@@ -107,7 +111,7 @@ class _TrackingScreenState extends State<UserScreen> {
           ],
         ),
         child: Text(
-          'Distance left from the bus: ${distanceLeft.toStringAsFixed(2)} meters',
+          'Distance left: ${distanceLeft.toStringAsFixed(2)} $unit',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -189,6 +193,7 @@ class _TrackingScreenState extends State<UserScreen> {
 
           setState(() {
             distanceLeft = distance;
+            _markers.clear();
           });
              } 
             else {

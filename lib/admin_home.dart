@@ -18,10 +18,14 @@ class Driver_Home extends State<AdminHome> {
   final ref = FirebaseDatabase.instance.ref("Positions");
   
   @override
-  Widget build(BuildContext context) {
-    final available = ref.child('available').get();
-    //if (available == 'true'){isButtonEnabled== true;}else{isButtonEnabled = false;}
-
+  Widget build(BuildContext context)  {
+      DatabaseReference starCountRef = ref.child('available');
+starCountRef.onValue.listen((DatabaseEvent event) {
+    var available = event.snapshot.value;
+    print("======================================");
+    print(available);
+    if (available == 'true'){isButtonEnabled== true;}else{isButtonEnabled = false;}
+});
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -83,7 +87,7 @@ class Driver_Home extends State<AdminHome> {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
   }   
   void disableButton(){
-    ref.set({
+    ref.update({
       "available" : "false"
     });
   } 
