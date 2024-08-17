@@ -14,13 +14,13 @@ class AdminHome extends StatefulWidget {
 }
 
 class Driver_Home extends State<AdminHome> {
-  bool isButtonEnabled = true;
+  var isButtonEnabled;
   final ref = FirebaseDatabase.instance.ref("Positions");
 
   @override
   void initState() {
-    super.initState();
     getStatus();
+    super.initState();
   }
   
   @override
@@ -92,7 +92,12 @@ class Driver_Home extends State<AdminHome> {
   } 
   void getStatus() async{
     final snapshot = await ref.child('available').get();
-    if (snapshot.value == 'true'){isButtonEnabled== true;}else{isButtonEnabled = false;}
+    print ("heyyyyyyyyyyyyyyyyyyyyyyyyy");
+    print(snapshot.value);
+    setState((){
+    if (snapshot.value == 'true'){isButtonEnabled== true;print("Enabledddddddddddddddddddddd");}else{isButtonEnabled = false;print("dddddddddddddddddddddddddddddddddddddddddd");}
+
+    });
 
   }
 }
