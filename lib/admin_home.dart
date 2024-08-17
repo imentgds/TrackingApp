@@ -16,16 +16,15 @@ class AdminHome extends StatefulWidget {
 class Driver_Home extends State<AdminHome> {
   bool isButtonEnabled = true;
   final ref = FirebaseDatabase.instance.ref("Positions");
+
+  @override
+  void initState() {
+    super.initState();
+    getStatus();
+  }
   
   @override
   Widget build(BuildContext context)  {
-      DatabaseReference starCountRef = ref.child('available');
-starCountRef.onValue.listen((DatabaseEvent event) {
-    var available = event.snapshot.value;
-    print("======================================");
-    print(available);
-    if (available == 'true'){isButtonEnabled== true;}else{isButtonEnabled = false;}
-});
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -91,6 +90,11 @@ starCountRef.onValue.listen((DatabaseEvent event) {
       "available" : "false"
     });
   } 
+  void getStatus() async{
+    final snapshot = await ref.child('available').get();
+    if (snapshot.value == 'true'){isButtonEnabled== true;}else{isButtonEnabled = false;}
+
+  }
 }
 class MyDrawer extends StatelessWidget {
   final VoidCallback onProfileTap;

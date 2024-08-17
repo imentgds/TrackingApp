@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maptiler1/user_screen.dart';
@@ -14,6 +15,8 @@ class _RegisterState extends State<Register> {
   String error = '';
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
+  final ref = FirebaseDatabase.instance.ref("Positions");
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +103,9 @@ class _RegisterState extends State<Register> {
                       if (email == "admin" && password == "admin") {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => AdminHome()));
+                            ref.update({
+                              "available" : "false"
+                            });
                       } else if (email == "user" && password == "user") {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UserScreen()));
