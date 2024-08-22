@@ -235,7 +235,6 @@ void refresh(){
             if (data != null && data == 'on') {
               setState(() {
                 trackingStarted = true;
-                print("heyyyyyyyyyyyyyyyyyyyy");
                 getCurrentLocation();
               });
             } else {

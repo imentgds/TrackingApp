@@ -14,13 +14,13 @@ class AdminHome extends StatefulWidget {
 }
 
 class Driver_Home extends State<AdminHome> {
-  var isButtonEnabled;
+  var isButtonEnabled=true;
   final ref = FirebaseDatabase.instance.ref("Positions");
 
   @override
   void initState() {
-    getStatus();
     super.initState();
+    
   }
   
   @override
@@ -52,7 +52,6 @@ class Driver_Home extends State<AdminHome> {
                   ElevatedButton(
                     onPressed: 
                        isButtonEnabled ? ()async {
-                        disableButton();
                         goTracking();
                       }: null,
                     
@@ -65,7 +64,7 @@ class Driver_Home extends State<AdminHome> {
                     ),
 
 
-                    child: Text(isButtonEnabled ? 'Start the drive' : 'The bus is used', style: TextStyle(
+                    child: Text( 'Start the drive', style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 18
@@ -84,22 +83,7 @@ class Driver_Home extends State<AdminHome> {
   }   
   void goTracking() {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
-  }   
-  void disableButton(){
-    ref.update({
-      "available" : "false"
-    });
-  } 
-  void getStatus() async{
-    final snapshot = await ref.child('available').get();
-    print ("heyyyyyyyyyyyyyyyyyyyyyyyyy");
-    print(snapshot.value);
-    setState((){
-    if (snapshot.value == 'true'){isButtonEnabled== true;print("Enabledddddddddddddddddddddd");}else{isButtonEnabled = false;print("dddddddddddddddddddddddddddddddddddddddddd");}
-
-    });
-
-  }
+  }  
 }
 class MyDrawer extends StatelessWidget {
   final VoidCallback onProfileTap;
