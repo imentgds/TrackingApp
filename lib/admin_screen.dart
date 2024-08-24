@@ -50,9 +50,6 @@ Widget MapView(){
   return FlutterMap(
         options: MapOptions(
           initialCenter: LatLng(36.8065 , 10.1815), initialZoom: 10.0,
-          onMapReady: () {
-              _mapController.move(LatLng(36.8098, 10.1115),14.0);
-          },
           ),
            
         children: [
@@ -109,7 +106,6 @@ Widget MapView(){
         "latitude": position.latitude,
         "longitude":position.longitude
       });
-      //_mapController.move(LatLng(position.latitude, position.longitude),15.0);
       positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 1,
