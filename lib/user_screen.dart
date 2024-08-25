@@ -78,7 +78,7 @@ class _TrackingScreenState extends State<UserScreen> {
           polylines: [
             Polyline(
               points: routePoints,
-              strokeWidth:9.0,
+              strokeWidth:5.0,
               color: Color.fromARGB(255, 52, 116, 168),
             ),
           ],
@@ -170,8 +170,8 @@ class _TrackingScreenState extends State<UserScreen> {
             )
             ),
             );
-      //_mapController.move(LatLng(position.latitude, position.longitude),15.0);
-      
+            print(_markers);
+    
         starCountRef.onValue.listen((DatabaseEvent event) {
             final data = event.snapshot.value;
             if (data != null && data is Map) {
@@ -193,13 +193,15 @@ class _TrackingScreenState extends State<UserScreen> {
 
           setState(() {
             distanceLeft = distance;
-            _markers.clear();
+            //_markers.clear();
           });
              } 
             else {
               print('No valid data found');
             }
         });
+        print("deeeeeeeeeeeeeeeeeeeeeee");
+        print(_markers);
 
          }
     }
